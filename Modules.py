@@ -89,7 +89,7 @@ def is_prime(n):
             return False
     return True
 
-# tạo khóa public và khóa private (module 5)
+# tạo khóa public và khóa private (module 4)
 def set_keys():
     prime1, prime2 = generate_prime_pair(8)
     n = prime1 * prime2
