@@ -4,6 +4,9 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 import secrets
+import random
+from math import isqrt, gcd
+import hashlib
 
 def generate_aes_key(size):
     sizeArr = [16,32]
@@ -66,7 +69,69 @@ def decrypt_file(file_path, key):
     new_file_name = file_name.split(".")[0] + "." + file_name.split(".")[1]
     os.rename(decrypted_file_path, new_file_name)
 
+# hàm khởi tạo cặp số nguyên tố
+def generate_prime_pair(bit_length):
+    p = random.getrandbits(bit_length) | 1
+    q = random.getrandbits(bit_length) | 1
+    while not is_prime(p) or not is_prime(q):
+        p += 2
+        q += 2
+        if is_prime(p) and is_prime(q) and p != q:
+            return p, q
+    return generate_prime_pair(bit_length + 1)
 
+# kiểm tra số nguyên tố
+def is_prime(n):
+    if n % 2 == 0 and n > 2:
+        return False
+    for i in range(3, isqrt(n) + 1, 2):
+        if n % i == 0:
+            return False
+    return True
+
+# tạo khóa public và khóa private (module 5)
+def set_keys():
+    prime1, prime2 = generate_prime_pair(8)
+    n = prime1 * prime2
+    fi = (prime1 - 1)*(prime2 - 1)
+    e = 7
+    while True: 
+        if(gcd(e, fi) == 1):
+            break
+        e+=1
+    public_key = e
+    d = 2
+    while True:
+        if((d*e) % fi == 1):
+            break
+        d += 1
+    private_key = d
+    return n, public_key, private_key
+
+# mã hóa chuỗi dùng thuật toán RSA với khóa public (module 5)
+def encrypt_message(message, public_key, n):
+    encrypted_message = []
+    for char in message:
+        mess = ord(char)
+        c = pow(mess, public_key, n)
+        encrypted_message.append(c)
+    return encrypted_message,''.join(str(c) for c in encrypted_message)
+
+# giải mã chuỗi dùng thuật toán RSA với khóa private (module 6)
+def decrypt_message(message, private_key, n):
+    temp = []
+    decrypted_message = ""
+    for char in message:
+        # c = ord(char)
+        m = pow(char, private_key, n)
+        temp.append(m)
+        decrypted_message += chr(m)
+    return decrypted_message
+
+# tính hash của chuỗi với SHA-1 (module 7)
+def hash_sha1_calculate(string):
+    hasher = hashlib.sha1(string.encode('utf-8')).hexdigest()
+    return hasher
 
 if __name__ == '__main__':
     choice = input("Ban muon generate 1 key khong ? (Y/N): ") #khong can generate 1 key neu ban muon giai ma 1 file
