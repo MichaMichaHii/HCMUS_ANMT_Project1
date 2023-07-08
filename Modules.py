@@ -110,22 +110,20 @@ def set_keys():
 
 # mã hóa chuỗi dùng thuật toán RSA với khóa public (module 5)
 def encrypt_message(message, public_key, n):
-    encrypted_message = []
+    encrypted_message = ''
     for char in message:
         mess = ord(char)
-        c = pow(mess, public_key, n)
-        encrypted_message.append(c)
-    return encrypted_message,''.join(str(c) for c in encrypted_message)
+        new_char = pow(mess, public_key, n)
+        encrypted_message += chr(new_char)
+    return encrypted_message
 
 # giải mã chuỗi dùng thuật toán RSA với khóa private (module 6)
 def decrypt_message(message, private_key, n):
-    temp = []
     decrypted_message = ""
     for char in message:
-        # c = ord(char)
-        m = pow(char, private_key, n)
-        temp.append(m)
-        decrypted_message += chr(m)
+        encrypt_char = ord(char)
+        decrypt_char = pow(encrypt_char, private_key, n)
+        decrypted_message += chr(decrypt_char)
     return decrypted_message
 
 # tính hash của chuỗi với SHA-1 (module 7)
@@ -164,7 +162,4 @@ if __name__ == '__main__':
         key = bytes(key.decode('unicode_escape').encode('latin-1'))
         decrypt_file(encrypted_file_path, key)
         print("File da giai ma thanh cong")
-
-
-
 
