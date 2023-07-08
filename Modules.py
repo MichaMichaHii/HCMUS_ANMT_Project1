@@ -110,22 +110,20 @@ def set_keys():
 
 # mã hóa chuỗi dùng thuật toán RSA với khóa public (module 5)
 def encrypt_message(message, public_key, n):
-    encrypted_message = []
+    encrypted_message = ''
     for char in message:
         mess = ord(char)
-        c = pow(mess, public_key, n)
-        encrypted_message.append(c)
-    return encrypted_message,''.join(str(c) for c in encrypted_message)
+        new_char = pow(mess, public_key, n)
+        encrypted_message += chr(new_char)
+    return encrypted_message
 
 # giải mã chuỗi dùng thuật toán RSA với khóa private (module 6)
 def decrypt_message(message, private_key, n):
-    temp = []
     decrypted_message = ""
     for char in message:
-        # c = ord(char)
-        m = pow(char, private_key, n)
-        temp.append(m)
-        decrypted_message += chr(m)
+        encrypt_char = ord(char)
+        decrypt_char = pow(encrypt_char, private_key, n)
+        decrypted_message += chr(decrypt_char)
     return decrypted_message
 
 # tính hash của chuỗi với SHA-1 (module 7)
@@ -133,38 +131,45 @@ def hash_sha1_calculate(string):
     hasher = hashlib.sha1(string.encode('utf-8')).hexdigest()
     return hasher
 
-if __name__ == '__main__':
-    choice = input("Ban muon generate 1 key khong ? (Y/N): ") #khong can generate 1 key neu ban muon giai ma 1 file
-    if (choice != "Y" and choice != "y" and choice != "N" and choice != "n"):
-        print("Error")
-        sys.exit()
-    elif (choice == "Y" or choice =="y"):
-        key_size = int(input("Ban muon key bao nhieu bytes(16/32) ? "))
-        key = generate_aes_key(key_size)
-        choice = input("Ban muon in key ra man hinh khong (khuyen khich in ra va luu lai key o 1 noi an toan) ? (Y/N) ")
-        if (choice != "Y" and choice != "y" and choice != "N" and choice != "n"):
-            print("Error")
-            sys.exit()
-        elif (choice == "Y" or choice == "y"):
-            print(key)
-            print("Ban nen luu lai key cua minh vao mot noi an toan nhe")
+# if __name__ == '__main__':
+#     choice = input("Ban muon generate 1 key khong ? (Y/N): ") #khong can generate 1 key neu ban muon giai ma 1 file
+#     if (choice != "Y" and choice != "y" and choice != "N" and choice != "n"):
+#         print("Error")
+#         sys.exit()
+#     elif (choice == "Y" or choice =="y"):
+#         key_size = int(input("Ban muon key bao nhieu bytes(16/32) ? "))
+#         key = generate_aes_key(key_size)
+#         choice = input("Ban muon in key ra man hinh khong (khuyen khich in ra va luu lai key o 1 noi an toan) ? (Y/N) ")
+#         if (choice != "Y" and choice != "y" and choice != "N" and choice != "n"):
+#             print("Error")
+#             sys.exit()
+#         elif (choice == "Y" or choice == "y"):
+#             print(key)
+#             print("Ban nen luu lai key cua minh vao mot noi an toan nhe")
 
-    choice = input("Chon (E)ncrypted de ma hoa hoac (D)ecrypted de giai ma: ")
-    if (choice != "E" and choice != "D" and choice != "e" and choice != "d"):
-        print("Error")
-        sys.exit()
-    elif (choice == "E" or choice =="e"):
-        file_path = input("Nhap duong dan file can ma hoa: ")
-        encrypt_file(file_path, key)
-        print("File da ma hoa thanh cong")
-    elif (choice == "D" or choice =="d"):
-        encrypted_file_path = input("Nhap duong dan file can ma hoa: ")
-        key = input("Nhap key: ")
-        key = key.encode('utf-8')
-        key = bytes(key.decode('unicode_escape').encode('latin-1'))
-        decrypt_file(encrypted_file_path, key)
-        print("File da giai ma thanh cong")
-
-
+#     choice = input("Chon (E)ncrypted de ma hoa hoac (D)ecrypted de giai ma: ")
+#     if (choice != "E" and choice != "D" and choice != "e" and choice != "d"):
+#         print("Error")
+#         sys.exit()
+#     elif (choice == "E" or choice =="e"):
+#         file_path = input("Nhap duong dan file can ma hoa: ")
+#         encrypt_file(file_path, key)
+#         print("File da ma hoa thanh cong")
+#     elif (choice == "D" or choice =="d"):
+#         encrypted_file_path = input("Nhap duong dan file can ma hoa: ")
+#         key = input("Nhap key: ")
+#         key = key.encode('utf-8')
+#         key = bytes(key.decode('unicode_escape').encode('latin-1'))
+#         decrypt_file(encrypted_file_path, key)
+#         print("File da giai ma thanh cong")
 
 
+
+message = 'open a folder'
+n, public_key, private_key = set_keys()
+print("public key:",public_key,", private key:", private_key)
+encrypted_message = encrypt_message(message, public_key, n)
+print("encrypted message:", encrypted_message)
+decrypted_message = decrypt_message(encrypted_message, private_key, n)
+print("decrypted message:", decrypted_message)
+print('hash calculate:', hash_sha1_calculate(message))
