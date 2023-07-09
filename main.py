@@ -42,7 +42,7 @@ elif (choice == "E" or choice == "e"):
     with open(f"{filename}.metadata.json", "w") as file:
         json.dump(data, file, indent=8)
 elif (choice == "D" or choice == "d"):
-    encrypted_file_path = input("Nhap duong dan file can ma hoa: ")
+    encrypted_file_path = input("Nhap duong dan file can giai ma: ")
     choice = input("Ban muon nhap key hay chon tu file? (K)eyboard/(F)ile: ")
     if (choice != "F" and choice != "f" and choice != "K" and choice != "k"):
         print("Error")
