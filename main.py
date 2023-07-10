@@ -59,6 +59,7 @@ elif (choice == "D" or choice == "d"):
                     Ks = decrypt_message(HKprivate["Kx"], int(Kprivate_input), int(HKprivate["n"]))
                     Ks = Ks.encode('utf-8').decode('unicode_escape').encode('latin-1')
                     decrypt_file(encrypted_file_path,Ks)
+                    print("Giai ma file thanh cong")
                 else:
                     print("Khoa sai")
                     sys.exit()
@@ -77,6 +78,7 @@ elif (choice == "D" or choice == "d"):
                     Ks = decrypt_message(HKprivate["Kx"], int(Kprivate_input), int(HKprivate["n"]))
                     Ks = Ks.encode('utf-8').decode('unicode_escape').encode('latin-1')
                     decrypt_file(encrypted_file_path,Ks)
+                    print("Giai ma file thanh cong")
                 else:
                     print("Khoa sai")
                     sys.exit()
